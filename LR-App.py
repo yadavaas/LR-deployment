@@ -165,8 +165,10 @@ st.write(prediction_proba)
 if prediction:
     st.subheader('Return on Investment (ROI)')
     NetIncome = input_df['LoanOriginalAmount'] * input_df['BorrowerAPR'] * input_df['Term'] / 12
-    ans = (NetIncome * 100 / input_df['LoanOriginalAmount'])
-    st.write('ROI When fees are not taken into account :{}'.format(ans))
+    ans = (NetIncome / input_df['LoanOriginalAmount'])
+    st.write('ROI When fees are not taken into account : ')
+    st.write(ans)
     NetIncome2 = input_df['LoanOriginalAmount'] * input_df['EstimatedEffectiveYield'] * input_df['Term'] / 12
-    ans2 = NetIncome2 * 100 / input_df['LoanOriginalAmount']
-    st.success('ROI When fees are taken into account :{}'.format(ans2))
+    ans2 = NetIncome2 / input_df['LoanOriginalAmount']
+    st.write('ROI When fees are taken into account :')
+    st.write(ans2)

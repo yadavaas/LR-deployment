@@ -41,23 +41,29 @@ else:
                                                                                    'Q1 2014'))
         Occupation = st.sidebar.selectbox('Occupation', ('Accountant/CPA', 'Administrative Assistant', 'Analyst',
                                                          'Architect', 'Attorney', 'Biologist', 'Bus Driver',
-                                                         'Car Dealer', 'Chemist', 'Civil Service', 'Clergy', 'Clerical',
+                                                         'Car Dealer', 'Chemist', 'Civil Service', 'Clergy',
+                                                         'Clerical',
                                                          'Computer Programmer', 'Construction', 'Dentist', 'Doctor',
                                                          'Engineer - Chemical', 'Engineer - Electrical',
                                                          'Engineer - Mechanical' 'Executive', 'Fireman',
-                                                         'Flight Attendant', 'Food Service', 'Food Service Management',
+                                                         'Flight Attendant', 'Food Service',
+                                                         'Food Service Management',
                                                          'Homemaker', 'Investor', 'Judge', 'Laborer', 'Landscaping',
-                                                         'Medical Technician', 'Military Enlisted', 'Military Officer',
+                                                         'Medical Technician', 'Military Enlisted',
+                                                         'Military Officer',
                                                          'Nurse (LPN)', 'Nurse (RN)', "Nurse's Aide", 'Other',
                                                          'Pharmacist', 'Pilot - Private/Commercial',
                                                          'Police Officer/Correction Officer', 'Postal Service',
                                                          'Principal', 'Professional', 'Professor', 'Psychologist',
                                                          'Realtor', 'Religious', 'Retail Management',
                                                          'Sales - Commission', 'Sales - Retail', 'Scientist',
-                                                         'Skilled Labor', 'Social Worker', 'Student - College Freshman',
-                                                         'Student - College Graduate Student', 'Student - College Junior',
+                                                         'Skilled Labor', 'Social Worker',
+                                                         'Student - College Freshman',
+                                                         'Student - College Graduate Student',
+                                                         'Student - College Junior',
                                                          'Student - College Senior', 'Student - College Sophomore',
-                                                         'Student - Community College', 'Student - Technical School',
+                                                         'Student - Community College',
+                                                         'Student - Technical School',
                                                          'Teacher', "Teacher's Aide", 'Tradesman - Carpenter',
                                                          'Tradesman - Electrician', 'Tradesman - Mechanic',
                                                          'Tradesman - Plumber', 'Truck Driver', 'Unknown',
@@ -111,6 +117,8 @@ else:
                 'TotalTrades': TotalTrades}
         features = pd.DataFrame(data, index=[0])
         return features
+
+
     input_df = user_input_features()
 
 # Combines user input features with entire penguins dataset
@@ -153,10 +161,21 @@ LR = pickle.load(open('LR_pickle.pkl', 'rb'))
 prediction = LR.predict(df)
 prediction_proba = LR.predict_proba(df)
 
-
+safe_html="""  
+      <div style="background-color:#8CE57A;padding:10px >
+       <h2 style="color:white;text-align:center;"> Accepted</h2>
+       </div>
+    """
+danger_html="""  
+      <div style="background-color:#F08080;padding:10px >
+       <h2 style="color:black ;text-align:center;"> High Risk</h2>
+       </div>
+    """
 st.subheader('Prediction')
-Loan_Status = np.array(['High Risk', 'Accepted'])
-st.write(Loan_Status[prediction])
+if prediction:
+    st.markdown(safe_html, unsafe_allow_html=True)
+else:
+    st.markdown(danger_html, unsafe_allow_html=True)
 
 st.subheader('Prediction Probability')
 st.write('0 = High Risk | 1 = Accepted')
@@ -166,9 +185,11 @@ if prediction:
     st.subheader('Return on Investment (ROI)')
     NetIncome = input_df['LoanOriginalAmount'] * input_df['BorrowerAPR'] * input_df['Term'] / 12
     ans = (NetIncome / input_df['LoanOriginalAmount'])
+    # ans = '{0:.{1}f}'.format(ans)
     st.write('ROI When fees are not taken into account : ')
     st.write(ans)
     NetIncome2 = input_df['LoanOriginalAmount'] * input_df['EstimatedEffectiveYield'] * input_df['Term'] / 12
     ans2 = NetIncome2 / input_df['LoanOriginalAmount']
     st.write('ROI When fees are taken into account :')
     st.write(ans2)
+
